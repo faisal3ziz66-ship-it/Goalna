@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مخطط الأهداف المالية</title>
+<!-- ©kzumeHR -->
+<!-- Created by kzumeHR | All rights reserved -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="أهدافي المالية">
+<meta name="application-name" content="أهدافي المالية">
+<meta name="description" content="تطبيق تتبع الأهداف المالية اليومية والأسبوعية والشهرية">
+<link rel="manifest" id="pwa-manifest">
+<link rel="apple-touch-icon" id="pwa-icon">
+<style>
+/* kzumeHR */
+:root{--bg:#0a0a0f;--author:"kzumeHR";--surface:#12121a;--card:#1a1a26;--gold:#f5c842;--gold-dim:#c9a227;--red:#e05252;--green:#3ecf6e;--text:#f0ede6;--text-muted:#8a8599;--border:rgba(245,200,66,.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 14px 80px;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(245,200,66,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+.z1{position:relative;z-index:1}
+.hidden{display:none!important}
+
+/* ── SMOOTH ANIMATIONS ── */
+@keyframes fadeSlideDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes popIn{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,200,66,.4)}50%{box-shadow:0 0 0 8px rgba(245,200,66,0)}}
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes ripple{0%{transform:scale(0);opacity:.6}100%{transform:scale(3);opacity:0}}
+@keyframes countUp{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes borderGlow{0%,100%{border-color:rgba(62,207,110,.25)}50%{border-color:rgba(62,207,110,.7)}}
+@keyframes spinIn{from{opacity:0;transform:rotate(-8deg) scale(.9)}to{opacity:1;transform:rotate(0) scale(1)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+
+/* Page entry */
+.header{animation:fadeSlideDown .6s cubic-bezier(.22,1,.36,1) both}
+.theme-bar{animation:fadeSlideDown .6s .08s cubic-bezier(.22,1,.36,1) both}
+#mainTabs{animation:fadeSlideDown .6s .14s cubic-bezier(.22,1,.36,1) both}
+
+/* Panel transitions */
+.goals-panel,.year-panel{animation:fadeSlideUp .45s cubic-bezier(.22,1,.36,1) both}
+
+/* Goal cards stagger */
+.goal-card{animation:fadeSlideUp .4s cubic-bezier(.22,1,.36,1) both}
+.goal-card:nth-child(1){animation-delay:.04s}.goal-card:nth-child(2){animation-delay:.09s}
+.goal-card:nth-child(3){animation-delay:.14s}.goal-card:nth-child(4){animation-delay:.19s}
+.goal-card:nth-child(n+5){animation-delay:.23s}
+
+/* Cells stagger */
+.cell{animation:scaleIn .28s cubic-bezier(.22,1,.36,1) both}
+.cell:nth-child(1){animation-delay:.02s}.cell:nth-child(2){animation-delay:.03s}
+.cell:nth-child(3){animation-delay:.04s}.cell:nth-child(4){animation-delay:.05s}
+.cell:nth-child(5){animation-delay:.06s}.cell:nth-child(6){animation-delay:.07s}
+.cell:nth-child(7){animation-delay:.08s}.cell:nth-child(8){animation-delay:.09s}
+.cell:nth-child(9){animation-delay:.10s}.cell:nth-child(10){animation-delay:.11s}
+.cell:nth-child(11){animation-delay:.12s}.cell:nth-child(12){animation-delay:.13s}
+.cell:nth-child(n+13){animation-delay:.14s}
+
+/* Month cards stagger */
+.month-card{animation:fadeSlideUp .35s cubic-bezier(.22,1,.36,1) both}
+.month-card:nth-child(1){animation-delay:.03s}.month-card:nth-child(2){animation-delay:.07s}
+.month-card:nth-child(3){animation-delay:.11s}.month-card:nth-child(4){animation-delay:.15s}
+.month-card:nth-child(5){animation-delay:.19s}.month-card:nth-child(6){animation-delay:.23s}
+.month-card:nth-child(7){animation-delay:.27s}.month-card:nth-child(8){animation-delay:.31s}
+.month-card:nth-child(9){animation-delay:.35s}.month-card:nth-child(10){animation-delay:.39s}
+.month-card:nth-child(11){animation-delay:.43s}.month-card:nth-child(12){animation-delay:.47s}
+
+/* Stat pills pop in */
+.stat-pill{animation:popIn .4s cubic-bezier(.22,1,.36,1) both}
+.stats-bar .stat-pill:nth-child(1){animation-delay:.05s}
+.stats-bar .stat-pill:nth-child(2){animation-delay:.12s}
+.stats-bar .stat-pill:nth-child(3){animation-delay:.19s}
+.stats-bar .stat-pill:nth-child(4){animation-delay:.26s}
+
+/* Modal */
+.modal{animation:scaleIn .3s cubic-bezier(.22,1,.36,1)}
+.modal-overlay{animation:fadeIn .2s ease}
+
+/* Ripple on cell click */
+.cell-ripple{position:absolute;border-radius:50%;pointer-events:none;animation:ripple .55s ease-out forwards}
+
+/* Current cell pulse */
+.cell.current{animation:pulse 2.2s ease-in-out infinite}
+
+/* Shimmer on progress fill */
+.prog-fill,.gc-fill,.mn-fill{
+  background-size:200% auto;
+  background-image:linear-gradient(90deg,var(--green) 0%,#5ff09a 40%,#c0fad8 50%,#5ff09a 60%,var(--green) 100%);
+  animation:shimmer 2.5s linear infinite;
+  transition:width .7s cubic-bezier(.22,1,.36,1)
+}
+
+/* Hover lift — smooth */
+.goal-card{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease,border-color .25s ease}
+.goal-card:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 14px 40px rgba(0,0,0,.5);border-color:rgba(245,200,66,.3)}
+
+/* Tab transitions */
+.main-tab{transition:background .25s cubic-bezier(.22,1,.36,1),color .2s,transform .12s}
+.main-tab:active{transform:scale(.95)}
+
+/* Button press */
+.btn-add,.btn-prim,.btn-nav{transition:transform .15s cubic-bezier(.22,1,.36,1),box-shadow .2s,opacity .15s}
+.btn-add:active,.btn-prim:active,.btn-nav:active{transform:scale(.93)}
+
+/* Theme button */
+.theme-btn{transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s}
+.theme-btn:hover{box-shadow:0 0 14px rgba(255,255,255,.2)}
+
+/* Motivation float */
+.motiv{animation:floatY 4s ease-in-out infinite}
+.motiv .me{display:inline-block;animation:floatY 3s ease-in-out infinite}
+
+/* Completion banner */
+.comp-banner{animation:borderGlow 2s ease-in-out infinite}
+
+/* Back button */
+.btn-back{transition:all .22s cubic-bezier(.22,1,.36,1)}
+.btn-back:hover{transform:translateX(4px)}
+
+/* Empty state */
+.empty-state .ei{display:inline-block;animation:floatY 3s ease-in-out infinite}
+
+/* Mode btn */
+.mode-btn{transition:all .22s cubic-bezier(.22,1,.36,1)}
+.mode-btn:hover{transform:translateY(-2px)}
+.mode-btn:active{transform:scale(.94)}
+
+/* Month card */
+.month-card{transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,border-color .22s}
+.month-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+
+/* Weekly cell */
+.cell{transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .18s}
+
+/* Progress bar smooth fill — handled above in shimmer block */
+
+/* Stat number update flash */
+@keyframes valFlash{0%{transform:scale(1.25) translateY(-3px);color:#fff}100%{transform:scale(1) translateY(0)}}
+.val-flash{animation:valFlash .35s cubic-bezier(.22,1,.36,1)}
+
+/* Input focus smooth */
+.ig input,.ig select{transition:border-color .2s,box-shadow .2s,background .2s}
+/* HEADER */
+.header{text-align:center;margin-bottom:22px;position:relative;z-index:1}
+.header .lbl{font-size:10px;letter-spacing:4px;color:var(--gold);opacity:.8;margin-bottom:5px}
+.header h1{font-size:clamp(22px,5vw,38px);font-weight:900;line-height:1.1}
+.header h1 span{color:var(--gold)}
+/* THEME */
+.theme-bar{display:flex;align-items:center;gap:9px;margin-bottom:18px;position:relative;z-index:1;flex-wrap:wrap;justify-content:center}
+.theme-lbl{font-size:11px;color:var(--text-muted);letter-spacing:2px}
+.theme-btn{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .2s,border-color .2s;position:relative;outline:none}
+.theme-btn:hover{transform:scale(1.2)}
+.theme-btn.active{border-color:#fff;transform:scale(1.15)}
+.theme-btn.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:900}
+/* MAIN TABS */
+.main-tabs{display:flex;gap:6px;margin-bottom:20px;background:var(--card);border-radius:13px;padding:4px;width:100%;max-width:700px;position:relative;z-index:1;border:1px solid var(--border)}
+.main-tab{flex:1;padding:9px 6px;border:none;border-radius:9px;background:transparent;color:var(--text-muted);font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,color .2s}
+.main-tab.active{background:var(--gold);color:#0a0a0f}
+/* GOALS PANEL */
+.goals-panel{width:100%;max-width:700px;position:relative;z-index:1}
+.goals-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.goals-header h2{font-size:15px;font-weight:700}
+.btn-add{background:var(--gold);color:#0a0a0f;border:none;border-radius:10px;padding:9px 18px;font-family:'Cairo',sans-serif;font-weight:900;font-size:13px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn-add:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(245,200,66,.3)}
+.goals-list{display:flex;flex-direction:column;gap:11px}
+.goal-card{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:16px 18px;cursor:pointer;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease,border-color .25s ease;position:relative;overflow:hidden}
+.goal-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.goal-card-name{font-size:15px;font-weight:900}
+.goal-card-mode{font-size:10px;background:rgba(245,200,66,.13);color:var(--gold);padding:3px 10px;border-radius:99px;letter-spacing:1px}
+.gc-bar{height:5px;background:var(--surface);border-radius:99px;overflow:hidden;margin-bottom:7px}
+.gc-fill{height:100%;background:linear-gradient(90deg,var(--green),#5ff09a);border-radius:99px;transition:width .5s}
+.gc-nums{display:flex;gap:12px;font-size:11px;color:var(--text-muted)}
+.gc-nums b{color:var(--text);font-weight:700}
+.gc-del{position:absolute;top:13px;left:14px;background:rgba(255,255,255,.05);border:none;border-radius:8px;width:28px;height:28px;cursor:pointer;color:var(--text-muted);font-size:13px;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.gc-del:hover{background:rgba(224,82,82,.2);color:var(--red)}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text-muted)}
+.empty-state .ei{font-size:46px;margin-bottom:10px}
+.empty-state p{font-size:13px;line-height:1.7}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px 22px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal h3{font-size:16px;font-weight:900;color:var(--gold);margin-bottom:18px}
+.irow{display:flex;gap:9px;flex-wrap:wrap}
+.ig{flex:1;min-width:120px;margin-bottom:11px}
+.ig label{display:block;font-size:11px;color:var(--text-muted);margin-bottom:5px;letter-spacing:1px}
+.ig input,.ig select{width:100%;background:var(--surface);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:11px 12px;color:var(--text);font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:border-color .2s;text-align:right}
+.ig input:focus,.ig select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,200,66,.1)}
+.mode-sel{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px}
+.mode-btn{flex:1;min-width:64px;padding:8px 5px;border:1px solid rgba(255,255,255,.1);border-radius:9px;background:transparent;color:var(--text-muted);font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;line-height:1.4}
+.mode-btn.active{background:var(--gold);border-color:var(--gold);color:#0a0a0f}
+.modal-btns{display:flex;gap:9px;margin-top:4px}
+.btn-prim{flex:1;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border:none;border-radius:10px;padding:12px;color:#0a0a0f;font-family:'Cairo',sans-serif;font-weight:900;font-size:14px;cursor:pointer;transition:transform .15s}
+.btn-prim:hover{transform:translateY(-1px)}
+.btn-sec{flex:1;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;color:var(--text-muted);font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:border-color .2s,color .2s}
+.btn-sec:hover{border-color:var(--red);color:var(--red)}
+/* DETAIL */
+.detail-panel{width:100%;max-width:700px;position:relative;z-index:1}
+.btn-back{background:transparent;border:1px solid var(--border);border-radius:9px;padding:7px 15px;color:var(--text-muted);font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;margin-bottom:14px;transition:border-color .2s,color .2s;display:inline-flex;align-items:center;gap:5px}
+.btn-back:hover{border-color:var(--gold);color:var(--gold)}
+.det-title{font-size:21px;font-weight:900;margin-bottom:3px}
+.det-sub{font-size:11px;color:var(--text-muted);margin-bottom:18px;letter-spacing:1px}
+/* STATS */
+.stats-bar{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.stat-pill{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:11px 14px;text-align:center;flex:1;min-width:100px}
+.stat-pill .val{font-size:17px;font-weight:900;color:var(--gold);display:block;line-height:1}
+.stat-pill .val.g{color:var(--green)}.stat-pill .val.r{color:var(--red)}
+.stat-pill .lbl{font-size:10px;color:var(--text-muted);margin-top:3px;letter-spacing:1px}
+/* PROGRESS */
+.prog-wrap{margin-bottom:20px}
+.prog-head{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:6px;letter-spacing:1px}
+.prog-bar{height:7px;background:var(--card);border-radius:99px;overflow:hidden;border:1px solid var(--border)}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),#5ff09a);border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+/* GRID */
+.grid-wrap{margin-bottom:18px}
+.grid-lbl{font-size:11px;letter-spacing:3px;color:var(--text-muted);text-align:center;margin-bottom:13px}
+.grid{display:grid;gap:7px}
+.g30{grid-template-columns:repeat(6,1fr)}
+.g52{grid-template-columns:repeat(7,1fr)}
+.g12{grid-template-columns:repeat(4,1fr)}
+@media(max-width:480px){.g30{grid-template-columns:repeat(5,1fr)}.g52{grid-template-columns:repeat(6,1fr)}.g12{grid-template-columns:repeat(3,1fr)}}
+.cell{aspect-ratio:1;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:transform .18s,box-shadow .18s;user-select:none;border:1px solid transparent;overflow:hidden}
+/* FREE MODE — all cells unlocked */
+.cell.unpaid{background:linear-gradient(135deg,#2a1212,#3a1818);border-color:rgba(224,82,82,.3);box-shadow:inset 0 0 14px rgba(224,82,82,.08)}
+.cell.unpaid:hover{transform:scale(1.08);box-shadow:0 0 16px rgba(224,82,82,.35)}
+.cell.paid{background:linear-gradient(135deg,#0d2a1a,#0e3521);border-color:rgba(62,207,110,.4);box-shadow:inset 0 0 14px rgba(62,207,110,.08)}
+.cell.paid:hover{transform:scale(1.08);box-shadow:0 0 16px rgba(62,207,110,.35)}
+.cell.current{outline:2px solid var(--gold);outline-offset:2px}
+.cell .cn{font-size:9px;font-weight:600;color:var(--text-muted);line-height:1}
+.cell.unpaid .cn{color:rgba(224,82,82,.6)}.cell.paid .cn{color:rgba(62,207,110,.6)}
+.cell .ci{font-size:15px;margin:1px 0;line-height:1}
+.cell .ca{font-size:8px;font-weight:700;color:var(--text-muted);text-align:center;padding:0 2px;line-height:1.2}
+.cell.paid .ca{color:var(--green)}.cell.unpaid .ca{color:var(--red)}
+/* MOTIVATION */
+.motiv{text-align:center;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:15px;margin-bottom:16px}
+.motiv .me{font-size:24px;margin-bottom:4px}.motiv p{font-size:12px;color:var(--text-muted);line-height:1.7}
+/* COMPLETION */
+.comp-banner{background:linear-gradient(135deg,#0d2a1a,#1a3d1f);border:2px solid var(--green);border-radius:16px;padding:22px;text-align:center;margin-bottom:16px;box-shadow:0 0 32px rgba(62,207,110,.25)}
+.comp-banner h2{font-size:20px;color:var(--green);margin-bottom:5px}.comp-banner p{color:var(--text-muted);font-size:12px}
+/* YEAR PANEL */
+.year-panel{width:100%;max-width:700px;position:relative;z-index:1}
+.year-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.year-head h2{font-size:15px;font-weight:900}
+.yr-nav{display:flex;gap:7px}
+.btn-nav{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text-muted);font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.btn-nav:hover{border-color:var(--gold);color:var(--gold)}
+/* YEAR GOAL SELECTOR */
+.yr-goal-sel{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:14px 16px;margin-bottom:16px}
+.yr-goal-sel label{font-size:11px;color:var(--text-muted);letter-spacing:1px;display:block;margin-bottom:8px}
+.yr-goal-pills{display:flex;flex-wrap:wrap;gap:7px}
+.yr-goal-pill{padding:7px 14px;border:1px solid var(--border);border-radius:99px;background:transparent;color:var(--text-muted);font-family:'Cairo',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.yr-goal-pill.active{background:var(--gold);border-color:var(--gold);color:#0a0a0f;font-weight:700}
+/* MONTHS GRID */
+.months-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:20px}
+@media(max-width:420px){.months-grid{grid-template-columns:repeat(2,1fr)}}
+.month-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:14px;cursor:pointer;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,border-color .22s}
+.month-card.done{border-color:rgba(62,207,110,.35)}
+.month-card.cur{outline:2px solid var(--gold);outline-offset:2px}
+.month-name{font-size:13px;font-weight:700;margin-bottom:5px;display:flex;justify-content:space-between}
+.month-pct{font-size:17px;font-weight:900;color:var(--gold)}
+.mn-bar{height:4px;background:var(--surface);border-radius:99px;overflow:hidden;margin-bottom:5px}
+.mn-fill{height:100%;background:linear-gradient(90deg,var(--green),#5ff09a);border-radius:99px}
+.mn-meta{font-size:10px;color:var(--text-muted)}
+/* WEEKLY YEAR GRID */
+.wk-grid-wrap{margin-bottom:18px}
+.wk-stats{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#0a2015;font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;padding:10px 24px;border-radius:99px;box-shadow:0 8px 26px rgba(62,207,110,.4);transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:1000;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}.toast.red{background:var(--red);color:#2a0a0a;box-shadow:0 8px 26px rgba(224,82,82,.4)}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.cp{position:fixed;width:8px;height:8px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:999}
+/* THEMES */
+body.theme-gold{--bg:#0a0a0f;--surface:#12121a;--card:#1a1a26;--gold:#f5c842;--gold-dim:#c9a227;--text:#f0ede6;--text-muted:#8a8599;--border:rgba(245,200,66,.15)}
+body.theme-ocean{--bg:#050d1a;--surface:#081422;--card:#0d1e34;--gold:#38bdf8;--gold-dim:#0284c7;--text:#e0f2fe;--text-muted:#64a0c8;--border:rgba(56,189,248,.15)}
+body.theme-ocean .btn-prim{background:linear-gradient(135deg,#38bdf8,#0284c7)}
+body.theme-ocean .mode-btn.active,body.theme-ocean .main-tab.active{background:#38bdf8;border-color:#38bdf8;color:#050d1a}
+body.theme-rose{--bg:#120a0f;--surface:#1c1018;--card:#261520;--gold:#f472b6;--gold-dim:#db2777;--text:#fce7f3;--text-muted:#c084a0;--border:rgba(244,114,182,.15)}
+body.theme-rose .btn-prim{background:linear-gradient(135deg,#f472b6,#db2777)}
+body.theme-light{--bg:#f0eff8;--surface:#fff;--card:#fff;--gold:#7c3aed;--gold-dim:#6d28d9;--text:#1a1625;--text-muted:#6b7280;--border:rgba(124,58,237,.15)}
+body.theme-light .btn-prim{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff}
+body.theme-light .cell.unpaid{background:linear-gradient(135deg,#ffe4e4,#ffd0d0)}
+body.theme-light .cell.paid{background:linear-gradient(135deg,#d1fae5,#bbf7d0)}
+body.theme-light .stat-pill .val{color:#7c3aed}
+body.theme-light .goal-card-mode{background:rgba(124,58,237,.1);color:#7c3aed}
+body.theme-light .mode-btn.active{background:#7c3aed;border-color:#7c3aed;color:#fff}
+body.theme-light .main-tab.active{background:#7c3aed;color:#fff}
+body.theme-light .toast{color:#0a2015}
+</style>
+</head>
+<body class="theme-gold">
+
+<div class="header">
+  <div class="lbl">مخطط الأهداف المالية</div>
+  <h1>أهدافك <span>المالية</span> 💰</h1>
+</div>
+
+<div class="theme-bar">
+  <span class="theme-lbl">🎨</span>
+  <button class="theme-btn active" id="tbtn-gold" style="background:linear-gradient(135deg,#f5c842,#c9a227)" onclick="setTheme('gold')"></button>
+  <button class="theme-btn" id="tbtn-ocean" style="background:linear-gradient(135deg,#38bdf8,#0284c7)" onclick="setTheme('ocean')"></button>
+  <button class="theme-btn" id="tbtn-rose" style="background:linear-gradient(135deg,#f472b6,#db2777)" onclick="setTheme('rose')"></button>
+  <button class="theme-btn" id="tbtn-light" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)" onclick="setTheme('light')"></button>
+</div>
+
+<div class="main-tabs" id="mainTabs">
+  <button class="main-tab active" onclick="switchTab('goals')">🎯 أهدافي</button>
+  <button class="main-tab" onclick="switchTab('year')">📅 عرض السنة</button>
+</div>
+
+<!-- ═══ GOALS PANEL ═══ -->
+<div class="goals-panel" id="goalsPanel">
+  <div class="goals-header">
+    <h2 id="goalsCount">أهدافي (0)</h2>
+    <button class="btn-add" onclick="openModal()">＋ هدف جديد</button>
+  </div>
+  <div class="goals-list" id="goalsList"></div>
+</div>
+
+<!-- ═══ DETAIL PANEL ═══ -->
+<div class="detail-panel hidden" id="detailPanel">
+  <button class="btn-back" onclick="closeDetail()">← العودة</button>
+  <div class="det-title" id="detTitle"></div>
+  <div class="det-sub" id="detSub"></div>
+  <div class="stats-bar">
+    <div class="stat-pill"><span class="val" id="dsPeriod">-</span><span class="lbl" id="dsPerLbl">لكل فترة</span></div>
+    <div class="stat-pill"><span class="val g" id="dsPaid">0</span><span class="lbl">وُفِّر</span></div>
+    <div class="stat-pill"><span class="val r" id="dsRemain">-</span><span class="lbl">متبقي</span></div>
+    <div class="stat-pill"><span class="val" id="dsDone">-</span><span class="lbl" id="dsDoneLbl">مكتمل</span></div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-head"><span id="dProgLbl">التقدم</span><span id="dProgPct">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="dProgFill" style="width:0%"></div></div>
+  </div>
+  <div class="grid-wrap">
+    <div class="grid-lbl" id="dGridLbl">اضغط على أي مربع متى تريد 💰</div>
+    <div class="grid" id="dGrid"></div>
+  </div>
+  <div class="comp-banner hidden" id="compBanner">
+    <h2>🎉 أكملت هدفك!</h2><p id="compTxt"></p>
+  </div>
+  <div class="motiv"><div class="me" id="motivE">💪</div><p id="motivT">كل خطوة توفير تقربك من حريتك المالية!</p></div>
+  <div style="text-align:center;margin-top:8px">
+    <button class="btn-sec" style="width:auto;padding:9px 22px" onclick="deleteCurrentGoal()">🗑️ حذف هذا الهدف</button>
+  </div>
+</div>
+
+<!-- ═══ YEAR PANEL ═══ -->
+<div class="year-panel hidden" id="yearPanel">
+  <div class="year-head">
+    <h2 id="yrTitle">سنة 2025</h2>
+    <div class="yr-nav">
+      <button class="btn-nav" onclick="changeYear(-1)">→ سابق</button>
+      <button class="btn-nav" onclick="changeYear(1)">← تالي</button>
+    </div>
+  </div>
+
+  <div class="yr-goal-sel" id="yrGoalSel">
+    <label>اختر هدفاً لعرضه</label>
+    <div class="yr-goal-pills" id="yrGoalPills"></div>
+  </div>
+
+  <div class="main-tabs" style="margin-bottom:16px">
+    <button class="main-tab active" id="ytab-m" onclick="switchYearTab('monthly')">🗓️ شهري (12 شهر)</button>
+    <button class="main-tab" id="ytab-w" onclick="switchYearTab('weekly')">📆 أسبوعي (52 أسبوع)</button>
+  </div>
+
+  <div id="yrMonthly">
+    <div class="grid-lbl">اضغط على أي شهر لتسجيل مدخراته — كل الأشهر مفتوحة 💰</div>
+    <div class="months-grid" id="monthsGrid"></div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span id="mProgLbl">التقدم السنوي</span><span id="mProgPct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="mProgFill" style="width:0%"></div></div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-pill"><span class="val" id="msPeriod">-</span><span class="lbl">شهرياً</span></div>
+      <div class="stat-pill"><span class="val g" id="msPaid">0</span><span class="lbl">وُفِّر</span></div>
+      <div class="stat-pill"><span class="val r" id="msRemain">-</span><span class="lbl">متبقي</span></div>
+      <div class="stat-pill"><span class="val" id="msDone">-</span><span class="lbl">شهر مكتمل</span></div>
+    </div>
+  </div>
+
+  <div id="yrWeekly" class="hidden">
+    <div class="grid-lbl">اضغط على أي أسبوع لتسجيل مدخراته — كل الأسابيع مفتوحة 💰</div>
+    <div class="grid g52" id="weeklyGrid" style="margin-bottom:16px"></div>
+    <div class="prog-wrap">
+      <div class="prog-head"><span id="wProgLbl">التقدم السنوي</span><span id="wProgPct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="wProgFill" style="width:0%"></div></div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-pill"><span class="val" id="wsPeriod">-</span><span class="lbl">أسبوعياً</span></div>
+      <div class="stat-pill"><span class="val g" id="wsPaid">0</span><span class="lbl">وُفِّر</span></div>
+      <div class="stat-pill"><span class="val r" id="wsRemain">-</span><span class="lbl">متبقي</span></div>
+      <div class="stat-pill"><span class="val" id="wsDone">-</span><span class="lbl">أسبوع مكتمل</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:13px;text-align:center">
+    <p style="font-size:12px;color:var(--text-muted);line-height:1.8">
+      💡 لتفعيل عرض السنة أضف هدفاً من نوع <b style="color:var(--gold)">سنوي</b> في تبويب أهدافي
+    </p>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <h3>🎯 هدف مالي جديد</h3>
+    <div class="ig"><label>اسم الهدف</label><input type="text" id="mName" placeholder="مثال: سيارة جديدة"/></div>
+    <div class="irow">
+      <div class="ig"><label>المبلغ الكلي</label><input type="number" id="mTotal" placeholder="10000" min="1"/></div>
+      <div class="ig"><label>العملة</label>
+        <select id="mCur">
+          <option value="ر.س">ريال سعودي</option><option value="د.إ">درهم إماراتي</option>
+          <option value="د.ك">دينار كويتي</option><option value="ج.م">جنيه مصري</option>
+          <option value="$">دولار</option><option value="€">يورو</option>
+        </select>
+      </div>
+    </div>
+    <div class="ig"><label>نوع الهدف</label>
+      <div class="mode-sel">
+        <button class="mode-btn active" onclick="selMode('daily')" id="md-daily">📅 يومي<br><small>30 يوم</small></button>
+        <button class="mode-btn" onclick="selMode('weekly')" id="md-weekly">📆 أسبوعي<br><small>52 أسبوع</small></button>
+        <button class="mode-btn" onclick="selMode('monthly')" id="md-monthly">🗓️ شهري<br><small>12 شهر</small></button>
+        <button class="mode-btn" onclick="selMode('yearly')" id="md-yearly">🗺️ سنوي<br><small>12+52</small></button>
+      </div>
+    </div>
+    <div class="ig hidden" id="mYearRow"><label>السنة</label><input type="number" id="mYear" placeholder="2025" min="2020" max="2099"/></div>
+    <div class="modal-btns">
+      <button class="btn-prim" onclick="addGoal()">✅ إضافة</button>
+      <button class="btn-sec" onclick="closeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- kzumeHR watermark -->
+<div style="
+  position:fixed;
+  bottom:6px;
+  left:10px;
+  font-family:'Cairo',sans-serif;
+  font-size:9px;
+  color:rgba(255,255,255,0.06);
+  letter-spacing:1px;
+  pointer-events:none;
+  z-index:1;
+  user-select:none;
+  font-weight:300;
+  mix-blend-mode:screen;
+">kzumeHR</div>
+
+<!-- PWA INSTALL BANNER -->
+<div id="installBanner" style="
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:linear-gradient(135deg,#1a1a26,#12121a);
+  border-top:1px solid rgba(245,200,66,.25);
+  padding:14px 18px;display:none;
+  flex-direction:row;align-items:center;gap:12px;
+  box-shadow:0 -8px 30px rgba(0,0,0,.5);
+  animation:fadeSlideDown .4s cubic-bezier(.22,1,.36,1);
+">
+  <div style="font-size:32px;flex-shrink:0">📲</div>
+  <div style="flex:1">
+    <div style="font-family:Cairo,sans-serif;font-weight:900;font-size:14px;color:#f0ede6;margin-bottom:2px">ثبّت التطبيق</div>
+    <div style="font-family:Cairo,sans-serif;font-size:11px;color:#8a8599;line-height:1.5">أضفه لشاشتك الرئيسية ويشتغل بدون إنترنت</div>
+  </div>
+  <button id="installBtn" style="
+    background:linear-gradient(135deg,#f5c842,#c9a227);border:none;border-radius:10px;
+    padding:10px 16px;color:#0a0a0f;font-family:Cairo,sans-serif;font-weight:900;
+    font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;
+    transition:transform .15s;
+  " onclick="installApp()">تثبيت</button>
+  <button onclick="document.getElementById('installBanner').style.display='none'" style="
+    background:transparent;border:none;color:#8a8599;font-size:18px;cursor:pointer;
+    padding:4px;flex-shrink:0;line-height:1;
+  ">✕</button>
+</div>
+
+<script>
+// ══ CONSTANTS ══
+const SK='fin_goals_v5', TK='fin_theme_v2';
+const _author='kzumeHR'; // creator
+const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const MODE_LBL={daily:'يومي',weekly:'أسبوعي',monthly:'شهري',yearly:'سنوي'};
+const MODE_CNT={daily:30,weekly:52,monthly:12,yearly:null};
+// Approximate weeks per month (total 52)
+const WKS=[4,4,4,5,4,4,5,4,4,5,4,5];
+
+// ══ STATE ══
+let goals=[], curGoalId=null, curTab='goals', curYearTab='monthly';
+let viewYear=new Date().getFullYear(), yrGoalId=null, selMode_val='daily';
+
+const $=id=>document.getElementById(id);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+const fmt=(n,c)=>(n||0).toLocaleString('ar-EG',{maximumFractionDigits:1})+' '+(c||'ر.س');
+const save=()=>localStorage.setItem(SK,JSON.stringify(goals));
+const load=()=>{const s=localStorage.getItem(SK);goals=s?JSON.parse(s):[];}
+
+// ══ TABS ══
+function switchTab(t){
+  curTab=t;
+  ['goals','year'].forEach((x,i)=>{
+    document.querySelectorAll('#mainTabs .main-tab')[i].classList.toggle('active',x===t);
+  });
+  $('goalsPanel').classList.toggle('hidden',t!=='goals');
+  $('detailPanel').classList.add('hidden');
+  $('yearPanel').classList.toggle('hidden',t!=='year');
+  $('mainTabs').classList.toggle('hidden',false);
+  if(t==='year') renderYear();
+}
+
+// ══ MODAL ══
+function openModal(){
+  $('mName').value='';$('mTotal').value='';
+  selMode('daily');
+  $('modalOverlay').classList.remove('hidden');
+}
+function closeModal(){$('modalOverlay').classList.add('hidden');}
+function selMode(m){
+  selMode_val=m;
+  ['daily','weekly','monthly','yearly'].forEach(x=>$('md-'+x).classList.toggle('active',x===m));
+  $('mYearRow').classList.toggle('hidden',m!=='yearly');
+  if(m==='yearly') $('mYear').value=new Date().getFullYear();
+}
+
+function addGoal(){
+  const name=$('mName').value.trim()||'هدفي المالي';
+  const total=parseFloat($('mTotal').value);
+  const cur=$('mCur').value;
+  if(!total||total<=0){toast('❌ أدخل مبلغاً صحيحاً',true);return;}
+  const mode=selMode_val;
+  // yearly = 12 months + 52 weeks arrays
+  let cells, cells_wk;
+  if(mode==='yearly'){cells=Array(12).fill(false);cells_wk=Array(52).fill(false);}
+  else{cells=Array(MODE_CNT[mode]).fill(false);}
+  const goal={id:uid(),name,total,currency:cur,mode,
+    perPeriod: mode==='yearly'? total/12 : total/cells.length,
+    perWeek: mode==='yearly'? total/52 : null,
+    cells, cells_wk,
+    year: mode==='yearly'?(parseInt($('mYear').value)||new Date().getFullYear()):null,
+    startDate:new Date().toISOString()
+  };
+  goals.push(goal);save();closeModal();renderGoalsList();toast('✅ تم إضافة الهدف!');
+}
+
+// ══ GOALS LIST ══
+function renderGoalsList(){
+  $('goalsCount').textContent=`أهدافي (${goals.length})`;
+  const list=$('goalsList');
+  if(!goals.length){
+    list.innerHTML=`<div class="empty-state"><div class="ei">🎯</div><p>لا يوجد أهداف بعد<br>اضغط "+ هدف جديد" للبدء!</p></div>`;
+    return;
+  }
+  list.innerHTML='';
+  goals.forEach(g=>{
+    const paid=g.cells.filter(Boolean).length;
+    const cnt=g.cells.length;
+    const paidAmt=paid*g.perPeriod;
+    const pct=Math.round(paid/cnt*100);
+    const tag=MODE_LBL[g.mode]+(g.year?' '+g.year:'');
+    const card=document.createElement('div');
+    card.className='goal-card';
+    card.innerHTML=`
+      <button class="gc-del" onclick="delGoal('${g.id}',event)">🗑️</button>
+      <div class="goal-card-top">
+        <span class="goal-card-name">${g.name}</span>
+        <span class="goal-card-mode">${tag}</span>
+      </div>
+      <div class="gc-bar"><div class="gc-fill" style="width:${pct}%"></div></div>
+      <div class="gc-nums">
+        <span>وفّرت: <b>${fmt(paidAmt,g.currency)}</b></span>
+        <span>من: <b>${fmt(g.total,g.currency)}</b></span>
+        <span>${paid}/${cnt} · <b>${pct}%</b></span>
+      </div>`;
+    card.onclick=()=>openDetail(g.id);
+    list.appendChild(card);
+  });
+}
+
+function delGoal(id,e){
+  e.stopPropagation();
+  if(!confirm('حذف هذا الهدف نهائياً؟'))return;
+  goals=goals.filter(g=>g.id!==id);save();renderGoalsList();toast('🗑️ تم الحذف',true);
+}
+
+// ══ DETAIL ══
+function openDetail(id){
+  curGoalId=id;
+  const gp=$('goalsPanel'); gp.style.animation='none'; gp.style.opacity='0';
+  setTimeout(()=>{
+    gp.classList.add('hidden');
+    const dp=$('detailPanel');
+    dp.classList.remove('hidden');
+    dp.style.animation='fadeSlideUp .42s cubic-bezier(.22,1,.36,1) both';
+  },120);
+  $('mainTabs').classList.add('hidden');
+  renderDetail();
+}
+function closeDetail(){
+  curGoalId=null;
+  const dp=$('detailPanel');
+  dp.style.animation='fadeSlideDown .3s cubic-bezier(.22,1,.36,1) forwards';
+  dp.style.opacity='0';
+  setTimeout(()=>{
+    dp.classList.add('hidden');
+    dp.style.opacity='';dp.style.animation='';
+    $('goalsPanel').classList.remove('hidden');
+    $('goalsPanel').style.animation='fadeSlideUp .4s cubic-bezier(.22,1,.36,1) both';
+    $('goalsPanel').style.opacity='';
+    $('mainTabs').classList.remove('hidden');
+    renderGoalsList();
+  },220);
+}
+function deleteCurrentGoal(){
+  if(!confirm('حذف هذا الهدف؟'))return;
+  goals=goals.filter(g=>g.id!==curGoalId);
+  save();closeDetail();toast('🗑️ تم الحذف',true);
+}
+
+function renderDetail(){
+  const g=goals.find(x=>x.id===curGoalId);if(!g)return;
+  const cnt=g.cells.length;
+  const paid=g.cells.filter(Boolean).length;
+  const paidAmt=paid*g.perPeriod;
+  const pct=Math.round(paid/cnt*100);
+  const perLbl=g.mode==='daily'?'يومياً':g.mode==='weekly'?'أسبوعياً':g.mode==='monthly'?'شهرياً':'شهرياً';
+  const doneU=g.mode==='daily'?'يوم':g.mode==='weekly'?'أسبوع':'شهر';
+  $('detTitle').textContent=g.name;
+  $('detSub').textContent=`${MODE_LBL[g.mode]} · ${fmt(g.total,g.currency)} · ${cnt} فترة`;
+  $('dsPeriod').textContent=fmt(g.perPeriod,g.currency);
+  $('dsPerLbl').textContent=perLbl;
+  $('dsPaid').textContent=fmt(paidAmt,g.currency);
+  $('dsRemain').textContent=fmt(Math.max(0,g.total-paidAmt),g.currency);
+  $('dsDone').textContent=`${paid} / ${cnt}`;
+  $('dsDoneLbl').textContent=doneU+' مكتمل';
+  $('dProgLbl').textContent=g.name;
+  $('dProgPct').textContent=pct+'%';
+  $('dProgFill').style.width=pct+'%';
+  // Grid class
+  const gc=$('dGrid');
+  gc.className='grid '+(g.mode==='monthly'||g.mode==='yearly'?'g12':g.mode==='daily'?'g30':'g52');
+  $('dGridLbl').textContent='اضغط على أي مربع متى تريد — كل الصناديق مفتوحة 💰';
+  buildDetailGrid(g);
+  updateMotiv(paid,cnt);
+  setTimeout(animateStats, 50);
+  if(paid===cnt){$('compBanner').classList.remove('hidden');$('compTxt').textContent=`وفّرت ${fmt(g.total,g.currency)} كاملاً — أنت بطل! 🏆`;confetti(50);}
+  else $('compBanner').classList.add('hidden');
+}
+
+function buildDetailGrid(g){
+  const el=$('dGrid');el.innerHTML='';
+  const today=new Date();
+  // Find "current" index just for highlighting — not for locking
+  const startDate=new Date(g.startDate);
+  let curIdx=-1;
+  if(g.mode==='daily') curIdx=Math.floor((today-startDate)/86400000);
+  else if(g.mode==='weekly') curIdx=Math.floor((today-startDate)/(86400000*7));
+  else if(g.mode==='monthly') curIdx=(today.getFullYear()-startDate.getFullYear())*12+(today.getMonth()-startDate.getMonth());
+  else curIdx=(today.getFullYear()-startDate.getFullYear())*12+(today.getMonth()-startDate.getMonth());
+
+  g.cells.forEach((paid,i)=>{
+    const cell=document.createElement('div');
+    const isCur=i===curIdx;
+    cell.className='cell '+(paid?'paid':'unpaid')+(isCur?' current':'');
+    let lbl;
+    if(g.mode==='daily') lbl=`يوم ${i+1}`;
+    else if(g.mode==='weekly') lbl=`أ${i+1}`;
+    else lbl=MONTHS[i%12].slice(0,3);
+    cell.innerHTML=`<span class="cn">${lbl}</span><span class="ci">${paid?'✅':'💰'}</span><span class="ca">${fmt(g.perPeriod,g.currency)}</span>`;
+    cell.onclick=(e)=>{spawnRipple(e,cell,'paid');toggleDetailCell(g.id,i);};
+    el.appendChild(cell);
+  });
+}
+
+function toggleDetailCell(gid,i){
+  const g=goals.find(x=>x.id===gid);if(!g)return;
+  g.cells[i]=!g.cells[i];save();renderDetail();
+  if(g.cells[i]){toast('🎉 رائع! تم تسجيل الإيداع');confetti();}
+  else toast('↩️ تم الإلغاء',true);
+}
+
+function updateMotiv(paid,total){
+  const r=paid/total;
+  const msgs=[
+    {e:'🌱',t:'البداية هي أصعب خطوة — وأنت بدأت بالفعل!'},
+    {e:'💪',t:`وفّرت ${paid} فترة! الاستمرارية هي سر الثروة.`},
+    {e:'🔥',t:`رائع! أنت تبني عادة مالية قوية.`},
+    {e:'⭐',t:`تجاوزت النصف! أنت أقرب من هدفك.`},
+    {e:'🚀',t:`ذهبي! الهدف يلوح في الأفق.`},
+    {e:'🎯',t:`لا يمكن إيقافك! أيام قليلة وتنهي.`},
+    {e:'🏆',t:`استثنائي! قريب جداً، واصل!`},
+  ];
+  const idx=Math.min(Math.floor(r*(msgs.length-1)),msgs.length-1);
+  $('motivE').textContent=msgs[idx].e;$('motivT').textContent=msgs[idx].t;
+}
+
+// ══ YEAR PANEL ══
+function renderYear(){
+  $('yrTitle').textContent=`سنة ${viewYear}`;
+  buildYrGoalSel();
+  if(curYearTab==='monthly') renderMonthly();
+  else renderWeekly();
+}
+
+function buildYrGoalSel(){
+  const yg=goals.filter(g=>g.mode==='yearly'&&g.year===viewYear);
+  const pills=$('yrGoalPills');
+  pills.innerHTML='';
+  if(!yg.length){yrGoalId=null;$('yrGoalSel').style.opacity='.5';return;}
+  $('yrGoalSel').style.opacity='1';
+  if(!yrGoalId||!yg.find(g=>g.id===yrGoalId)) yrGoalId=yg[0].id;
+  yg.forEach(g=>{
+    const btn=document.createElement('button');
+    btn.className='yr-goal-pill'+(g.id===yrGoalId?' active':'');
+    btn.textContent=g.name;
+    btn.onclick=()=>{yrGoalId=g.id;renderYear();};
+    pills.appendChild(btn);
+  });
+}
+
+function changeYear(d){viewYear+=d;renderYear();}
+
+function switchYearTab(t){
+  curYearTab=t;
+  $('ytab-m').classList.toggle('active',t==='monthly');
+  $('ytab-w').classList.toggle('active',t==='weekly');
+  const show=t==='monthly'?$('yrMonthly'):$('yrWeekly');
+  const hide=t==='monthly'?$('yrWeekly'):$('yrMonthly');
+  if(!hide.classList.contains('hidden')){
+    hide.style.opacity='0';hide.style.transform='translateX(20px)';
+    setTimeout(()=>{
+      hide.classList.add('hidden');hide.style.opacity='';hide.style.transform='';
+      show.classList.remove('hidden');
+      show.style.animation='fadeSlideUp .38s cubic-bezier(.22,1,.36,1) both';
+      if(t==='monthly') renderMonthly(); else renderWeekly();
+    },180);
+  } else {
+    show.classList.remove('hidden');
+    show.style.animation='fadeSlideUp .38s cubic-bezier(.22,1,.36,1) both';
+    if(t==='monthly') renderMonthly(); else renderWeekly();
+  }
+}
+
+/* ── MONTHLY VIEW ── */
+function renderMonthly(){
+  const g=goals.find(x=>x.id===yrGoalId&&x.mode==='yearly');
+  const today=new Date();
+  const mg=$('monthsGrid');mg.innerHTML='';
+  MONTHS.forEach((name,mi)=>{
+    const isCur=today.getFullYear()===viewYear&&today.getMonth()===mi;
+    const paid=g?g.cells[mi]:false;
+    const pct=paid?100:0;
+    const card=document.createElement('div');
+    card.className='month-card'+(paid?' done':'')+(isCur?' cur':'');
+    card.innerHTML=`
+      <div class="month-name">${name}${isCur?' 📍':''}<span class="month-pct">${paid?'✅':'💰'}</span></div>
+      <div class="mn-bar"><div class="mn-fill" style="width:${paid?100:0}%"></div></div>
+      <div class="mn-meta">${g?fmt(g.perPeriod,g.currency):'لا يوجد هدف'}</div>`;
+    if(g) card.onclick=(e)=>{spawnRipple(e,card,'paid');toggleMonthCell(g.id,mi);};
+    mg.appendChild(card);
+  });
+  if(g){
+    const paid=g.cells.filter(Boolean).length;
+    const pct=Math.round(paid/12*100);
+    $('msPeriod').textContent=fmt(g.perPeriod,g.currency);
+    $('msPaid').textContent=fmt(paid*g.perPeriod,g.currency);
+    $('msRemain').textContent=fmt(Math.max(0,g.total-paid*g.perPeriod),g.currency);
+    $('msDone').textContent=`${paid} / 12`;
+    $('mProgLbl').textContent=g.name;
+    $('mProgPct').textContent=pct+'%';
+    $('mProgFill').style.width=pct+'%';
+  } else {
+    ['msPeriod','msPaid','msRemain','msDone'].forEach(id=>$(id).textContent='—');
+    $('mProgPct').textContent='0%';$('mProgFill').style.width='0%';
+  }
+}
+
+function toggleMonthCell(gid,mi){
+  const g=goals.find(x=>x.id===gid);if(!g)return;
+  g.cells[mi]=!g.cells[mi];save();renderMonthly();
+  if(g.cells[mi]){toast('🎉 شهر مُوفَّر!');confetti();}
+  else toast('↩️ تم الإلغاء',true);
+}
+
+/* ── WEEKLY VIEW ── */
+function renderWeekly(){
+  const g=goals.find(x=>x.id===yrGoalId&&x.mode==='yearly');
+  const today=new Date();
+  const yearStart=new Date(viewYear,0,1);
+  const curWk=viewYear===today.getFullYear()?Math.floor((today-yearStart)/(86400000*7)):-1;
+  const wg=$('weeklyGrid');wg.innerHTML='';
+  for(let i=0;i<52;i++){
+    const cell=document.createElement('div');
+    const paid=g?g.cells_wk[i]:false;
+    const isCur=i===curWk;
+    cell.className='cell '+(paid?'paid':'unpaid')+(isCur?' current':'');
+    cell.innerHTML=`<span class="cn">أ${i+1}</span><span class="ci">${paid?'✅':'💰'}</span>`;
+    if(g) cell.onclick=(e)=>{spawnRipple(e,cell,'paid');toggleWeekCell(g.id,i);};
+    wg.appendChild(cell);
+  }
+  if(g){
+    const paid=(g.cells_wk||[]).filter(Boolean).length;
+    const pct=Math.round(paid/52*100);
+    $('wsPeriod').textContent=fmt(g.perWeek,g.currency);
+    $('wsPaid').textContent=fmt(paid*g.perWeek,g.currency);
+    $('wsRemain').textContent=fmt(Math.max(0,g.total-paid*g.perWeek),g.currency);
+    $('wsDone').textContent=`${paid} / 52`;
+    $('wProgLbl').textContent=g.name;
+    $('wProgPct').textContent=pct+'%';
+    $('wProgFill').style.width=pct+'%';
+  } else {
+    ['wsPeriod','wsPaid','wsRemain','wsDone'].forEach(id=>$(id).textContent='—');
+    $('wProgPct').textContent='0%';$('wProgFill').style.width='0%';
+  }
+}
+
+function toggleWeekCell(gid,i){
+  const g=goals.find(x=>x.id===gid);if(!g)return;
+  if(!g.cells_wk) g.cells_wk=Array(52).fill(false);
+  g.cells_wk[i]=!g.cells_wk[i];save();renderWeekly();renderMonthly();
+  if(g.cells_wk[i]){toast('🎉 أسبوع مُوفَّر!');confetti();}
+  else toast('↩️ تم الإلغاء',true);
+}
+
+// ══ THEME ══
+function setTheme(n){
+  document.body.className='theme-'+n;
+  ['gold','ocean','rose','light'].forEach(t=>{const b=$('tbtn-'+t);if(b)b.classList.toggle('active',t===n);});
+  localStorage.setItem(TK,n);
+}
+function loadTheme(){setTheme(localStorage.getItem(TK)||'gold');}
+
+// ══ RIPPLE & ANIMATIONS ══
+function spawnRipple(e,el,color){
+  const r=document.createElement('div');
+  r.className='cell-ripple';
+  const sz=Math.max(el.offsetWidth,el.offsetHeight)*2;
+  const rect=el.getBoundingClientRect();
+  const x=(e.clientX-rect.left)-sz/2;
+  const y=(e.clientY-rect.top)-sz/2;
+  r.style.cssText=`width:${sz}px;height:${sz}px;left:${x}px;top:${y}px;
+    background:${color==='paid'?'rgba(62,207,110,.35)':'rgba(224,82,82,.35)'};`;
+  el.style.position='relative';
+  el.appendChild(r);
+  setTimeout(()=>r.remove(),560);
+}
+
+function animateVal(el){
+  el.classList.remove('val-flash');
+  void el.offsetWidth;
+  el.classList.add('val-flash');
+  setTimeout(()=>el.classList.remove('val-flash'),350);
+}
+
+function animateStats(){
+  document.querySelectorAll('.stat-pill .val').forEach(v=>animateVal(v));
+}
+
+// ══ TOAST & CONFETTI ══
+function toast(msg,red=false){
+  const t=$('toast');t.textContent=msg;
+  t.className='toast'+(red?' red':'')+' show';
+  setTimeout(()=>{t.className='toast'+(red?' red':'');},2800);
+}
+function confetti(n=22){
+  const cols=['#f5c842','#3ecf6e','#60a5fa','#f472b6','#fb923c'];
+  for(let i=0;i<n;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div');p.className='cp';
+      p.style.left=Math.random()*100+'vw';
+      p.style.background=cols[Math.floor(Math.random()*cols.length)];
+      p.style.animationDuration=(1.5+Math.random()*2)+'s';
+      p.style.animationDelay=Math.random()*0.4+'s';
+      p.style.width=p.style.height=(6+Math.random()*7)+'px';
+      document.body.appendChild(p);setTimeout(()=>p.remove(),3500);
+    },i*30);
+  }
+}
+
+$('modalOverlay').addEventListener('click',e=>{if(e.target===$('modalOverlay'))closeModal();});
+
+// ══ PWA ══
+const ICON_SVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+  <rect width='512' height='512' rx='100' fill='%230a0a0f'/>
+  <text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='300' font-family='Arial'>💰</text>
+  <rect x='60' y='380' width='392' height='72' rx='36' fill='%23f5c842'/>
+  <text x='256' y='416' dominant-baseline='middle' text-anchor='middle' font-size='44' font-family='Cairo,Arial' fill='%230a0a0f' font-weight='900'>أهدافي المالية</text>
+</svg>`;
+
+const MANIFEST = {
+  name: 'أهدافي المالية',
+  short_name: 'أهدافي',
+  description: 'تتبع أهدافك المالية اليومية والأسبوعية والشهرية',
+  start_url: '.',
+  display: 'standalone',
+  background_color: '#0a0a0f',
+  theme_color: '#0a0a0f',
+  orientation: 'portrait',
+  lang: 'ar',
+  dir: 'rtl',
+  icons: [
+    {src: `data:image/svg+xml,${ICON_SVG}`, sizes:'512x512', type:'image/svg+xml', purpose:'any maskable'},
+    {src: `data:image/svg+xml,${ICON_SVG}`, sizes:'192x192', type:'image/svg+xml'}
+  ]
+};
+
+// Inject manifest as blob
+const manifestBlob = new Blob([JSON.stringify(MANIFEST)],{type:'application/json'});
+const manifestURL  = URL.createObjectURL(manifestBlob);
+document.getElementById('pwa-manifest').href = manifestURL;
+
+// Apple touch icon
+const iconBlob = new Blob([`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230a0a0f'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='320'>💰</text></svg>`],{type:'image/svg+xml'});
+document.getElementById('pwa-icon').href = URL.createObjectURL(iconBlob);
+
+// Service Worker for offline support
+const SW_CODE = `
+const CACHE = 'fin-goal-v1';
+const ASSETS = ['/'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(()=>{})));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))
+  ));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(()=>
+    new Response('<h2 style="font-family:sans-serif;text-align:center;margin-top:30vh;color:#f5c842">يعمل بدون إنترنت ✅</h2>',{headers:{'Content-Type':'text/html'}})
+  )));
+});
+`;
+
+if('serviceWorker' in navigator){
+  const swBlob = new Blob([SW_CODE],{type:'application/javascript'});
+  const swURL  = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL, {scope:'/'})
+    .then(()=>console.log('SW registered'))
+    .catch(e=>console.log('SW error:',e));
+}
+
+// Install prompt
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(()=>{
+    const b = document.getElementById('installBanner');
+    b.style.display = 'flex';
+  }, 2000);
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').style.display = 'none';
+  toast('🎉 تم تثبيت التطبيق بنجاح!');
+  deferredPrompt = null;
+});
+
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(r=>{
+      if(r.outcome==='accepted') toast('🎉 جاري التثبيت...');
+      deferredPrompt=null;
+      document.getElementById('installBanner').style.display='none';
+    });
+  } else {
+    // iOS fallback
+    toast('📲 اضغط "مشاركة" ثم "إضافة للشاشة الرئيسية"');
+  }
+}
+
+// Detect iOS and show manual instructions
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = window.navigator.standalone;
+if(isIOS && !isStandalone){
+  setTimeout(()=>{
+    const b=document.getElementById('installBanner');
+    b.querySelector('div:nth-child(3) div:last-child').textContent='اضغط زر المشاركة ⬆️ ثم "إضافة للشاشة الرئيسية"';
+    b.style.display='flex';
+  },2500);
+}
+
+// ══ INIT ══
+load();renderGoalsList();loadTheme();
+</script>
+</body>
+</html>
